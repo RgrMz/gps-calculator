@@ -192,4 +192,100 @@ class CalculatorControllerTest
                 .param("n1", "0.000000000001").param("n2", "30"))
         		.andExpect(status().isBadRequest());
     }
+    
+    @Test
+    @Order(7)
+    void testMultiplicationPositiveNumbers() throws Exception
+    {
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/calculator/mult")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("n1", "2").param("n2", "3"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("6.0"));
+    }
+    @Test
+    @Order(8)
+    void testMultiplicationNegativeNumbers() throws Exception
+    {
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/calculator/mult")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("n1", "-2").param("n2", "-3"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("6.0"));
+    }
+    @Test
+    @Order(9)
+    void testMultiplicationPosNegNumbers() throws Exception
+    {
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/calculator/mult")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("n1", "5").param("n2", "-2"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("-10.0"));
+    }
+	
+    @Test
+    @Order(10)
+    void testMultiplicationFloatNumbers() throws Exception
+    {
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/calculator/mult")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("n1", "2.5").param("n2", "3.7"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("9.25"));
+    }
+    @Test
+    @Order(11)
+    void testMultiplicationZero() throws Exception
+    {
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/calculator/mult")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("n1", "10").param("n2", "0"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("0.0"));
+    }
+    @Test
+    @Order(11)
+    void testMultiplicationIntegerAndFloat() throws Exception
+    {
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/calculator/mult")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("n1", "10").param("n2", "0.15"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("1.5"));
+    }
+    @Test
+    @Order(13)
+    void testMultiplicationBadRequests() throws Exception
+    {
+    	// Text characters
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/calculator/mult")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("n1", "a").param("n2", "3"))
+        		.andExpect(status().isBadRequest());
+        
+        // Special characters
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/calculator/mult")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("n1", "@oda").param("n2", "3"))
+        		.andExpect(status().isBadRequest());
+        
+        // Number too large
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/calculator/mult")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("n1", "1000000000000").param("n2", "30"))
+        		.andExpect(status().isBadRequest());
+        
+        // Number too small
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/calculator/mult")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("n1", "0.000000000001").param("n2", "30"))
+        		.andExpect(status().isBadRequest());
+        
+     // List of numbers multiplied by a number
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/calculator/mult")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("n1", "[2,3]").param("n2", "30"))
+        		.andExpect(status().isBadRequest());
+    }
 }
