@@ -113,4 +113,83 @@ class CalculatorControllerTest
         		.andExpect(status().isBadRequest());
     }
     
+    @Test
+    @Order(7)
+    void testSubstractionPositiveNumbers() throws Exception
+    {
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/sub")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("n1", "2").param("n2", "3"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("-1"));
+    }
+    @Test
+    @Order(8)
+    void testSubstractionNegativeNumbers() throws Exception
+    {
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/sub")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("n1", "-2").param("n2", "-3"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("1"));
+    }
+    @Test
+    @Order(9)
+    void testSubstractionPosNegNumbers() throws Exception
+    {
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/sub")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("n1", "5").param("n2", "-2"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("7"));
+    }
+	
+    @Test
+    @Order(10)
+    void testSubstractionFloatNumbers() throws Exception
+    {
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/sub")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("n1", "2.5").param("n2", "3.7"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("-1.2"));
+    }
+    @Test
+    @Order(11)
+    void testSubstractionZero() throws Exception
+    {
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/sub")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("n1", "10").param("n2", "0"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("10"));
+    }
+    @Test
+    @Order(12)
+    void testSubstractionBadRequests() throws Exception
+    {
+    	// Text characters
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/sub")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("n1", "a").param("n2", "3"))
+        		.andExpect(status().isBadRequest());
+        
+        // Special characters
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/sub")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("n1", "#").param("n2", "3"))
+        		.andExpect(status().isBadRequest());
+        
+        // Number too large
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/sub")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("n1", "1000000000000").param("n2", "30"))
+        		.andExpect(status().isBadRequest());
+        
+        // Number too small
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/sub")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("n1", "0.000000000001").param("n2", "30"))
+        		.andExpect(status().isBadRequest());
+    }
 }
