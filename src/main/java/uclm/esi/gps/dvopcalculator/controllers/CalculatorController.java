@@ -29,4 +29,21 @@ public class CalculatorController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
+	
+	@PostMapping(value = "/sub")
+	public double substractTwoNumbers(@RequestParam("n1") String n1, @RequestParam("n2") String n2) {
+		try {
+			double result;
+			
+			if (n1.length() > 12 || n2.length() > 12)
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "One of the numbers has more than 12 digits.");
+			
+			Calculator myCalculator = new Calculator(Double.parseDouble(n1), Double.parseDouble(n2));
+			result = myCalculator.substractTwoNumbers();
+
+			return result;
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
 }
