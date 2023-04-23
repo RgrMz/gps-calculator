@@ -1,33 +1,42 @@
 package uclm.esi.gps.dvopcalculator;
 
-import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-public class CalculatorControllerTest 
+class CalculatorControllerTest 
 {
 	@Autowired
 	private MockMvc mockMvc;
+	@Autowired
+    private WebApplicationContext webApplicationContext;
+	
+	@BeforeEach
+    void setup() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
 	
     @Test
     @Order(1)
-    public void testAdditionPositiveNumbers() throws Exception
+    void testAdditionPositiveNumbers() throws Exception
     {
         this.mockMvc.perform(MockMvcRequestBuilders.post("/sum")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -37,7 +46,7 @@ public class CalculatorControllerTest
     }
     @Test
     @Order(2)
-    public void testAdditionNegativeNumbers() throws Exception
+    void testAdditionNegativeNumbers() throws Exception
     {
         this.mockMvc.perform(MockMvcRequestBuilders.post("/sum")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -47,7 +56,7 @@ public class CalculatorControllerTest
     }
     @Test
     @Order(3)
-    public void testAdditionPosNegNumbers() throws Exception
+    void testAdditionPosNegNumbers() throws Exception
     {
         this.mockMvc.perform(MockMvcRequestBuilders.post("/sum")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -57,7 +66,7 @@ public class CalculatorControllerTest
     }
     @Test
     @Order(4)
-    public void testAdditionFloatNumbers() throws Exception
+    void testAdditionFloatNumbers() throws Exception
     {
         this.mockMvc.perform(MockMvcRequestBuilders.post("/sum")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -67,7 +76,7 @@ public class CalculatorControllerTest
     }
     @Test
     @Order(5)
-    public void testAdditionZero() throws Exception
+    void testAdditionZero() throws Exception
     {
         this.mockMvc.perform(MockMvcRequestBuilders.post("/sum")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -77,7 +86,7 @@ public class CalculatorControllerTest
     }
     @Test
     @Order(6)
-    public void testAdditionBadRequests() throws Exception
+    void testAdditionBadRequests() throws Exception
     {
     	// Text characters
         this.mockMvc.perform(MockMvcRequestBuilders.post("/sum")
