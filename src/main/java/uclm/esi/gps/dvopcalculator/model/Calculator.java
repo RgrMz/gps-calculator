@@ -13,4 +13,8 @@ public class Calculator {
 	public double addTwoNumbers() {
 		return (n1 + n2);
 	}
+	
+	public double substractTwoNumbers() {
+		return (Math.round((n1 - n2)*100.0)/100.0);
+	}
 }
