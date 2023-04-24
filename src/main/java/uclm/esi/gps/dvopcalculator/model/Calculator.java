@@ -17,4 +17,8 @@ public class Calculator {
 	public double substractTwoNumbers() {
 		return (Math.round((n1 - n2)*100.0)/100.0);
 	}
+	
+	public double multiplyTwoNumbers() {
+		return n1 * n2;
+	}
 }
